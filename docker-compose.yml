@@ -1,8 +1,8 @@
 services:
   mywebsite:
     build:
-      context: ./mywebsite
-      dockerfile: ../Dockerfile
+      context: .
+      dockerfile: Dockerfile
     container_name: mywebsite
     restart: unless-stopped
     ports:
