@@ -128,33 +128,3 @@ git pull
 ## 📚 Documentação Completa
 
 Para detalhes completos, veja [DEPLOYMENT.md](./DEPLOYMENT.md)
-#!/bin/bash
-# Health check script para verificar o status da aplicação
-
-echo "🏥 Verificando saúde da aplicação..."
-echo ""
-
-# Verificar se o container está rodando
-if docker-compose ps | grep -q "Up"; then
-    echo "✅ Container está rodando"
-else
-    echo "❌ Container não está rodando"
-    exit 1
-fi
-
-# Verificar se a aplicação responde
-if curl -f -s http://localhost:3000 > /dev/null; then
-    echo "✅ Aplicação está respondendo"
-else
-    echo "❌ Aplicação não está respondendo"
-    exit 1
-fi
-
-# Mostrar recursos utilizados
-echo ""
-echo "📊 Uso de recursos:"
-docker stats --no-stream mywebsite
-
-echo ""
-echo "✅ Todos os checks passaram!"
-
