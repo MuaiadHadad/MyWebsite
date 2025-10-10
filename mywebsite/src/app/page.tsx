@@ -3,6 +3,8 @@ import React from "react";
 import NavBar from "./components/NavBar";
 import MainPixelHero from "./components/Main";
 import AboutMe from "./components/AboutMe";
+import ChatWidget from "./components/ChatWidget";
+
 import WorkExperience, {
     WorkExperienceTwoUp,
     WorkExperienceRight,
@@ -29,6 +31,8 @@ export default function App() {
             <EducationTraining />
             <SkillsSection />
             <ContactSection/>
+            <ChatWidget />
+
         </>
     );
 }

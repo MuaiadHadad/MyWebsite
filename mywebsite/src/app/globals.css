@@ -1,10 +1,15 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ==== PIXEL-ART SCROLLBAR (global) ==== */
+:root{
+    --px-size: 10px;                 /* “pixel” base (8–12 fica top) */
+    --px-track: #0b0b0f;             /* fundo do trilho */
+    --px-grid: rgba(255,255,255,.06);/* grelha do trilho */
+    --px-thumb-a: #19e29e;           /* verde principal */
+    --px-thumb-b: #0ea776;           /* verde sombra */
+    --px-border: #000000;            /* contorno “pixel” */
+    --px-face: rgba(255,255,255,.08);/* brilho interno do thumb */
 }
-
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -24,3 +29,179 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+/* ===== Global Scrollbar (dark + pixel vibe) ===== */
+:root{
+    --sb-bg: #0b0b0f;                 /* fundo do track */
+    --sb-grid: rgba(255,255,255,.06); /* linhas da grelha */
+    --sb-thumb: #10b981;              /* emerald */
+    --sb-thumb-ghost: rgba(16,185,129,.35);
+    --sb-border: rgba(255,255,255,.12);
+    --sb-radius: 12px;                /* cantos do thumb */
+    --sb-size: 12px;                  /* largura/altura */
+}
+
+/* Firefox */
+*{
+    scrollbar-width: thin;                      /* auto | thin | none */
+    scrollbar-color: var(--sb-thumb) #0a0a0f;   /* thumb | track */
+}
+
+/* WebKit (Chrome/Edge/Safari) */
+*::-webkit-scrollbar{
+    width: var(--sb-size);
+    height: var(--sb-size);
+    background: transparent; /* deixa ver o track custom */
+}
+
+/* track com grelha “pixel” + borda subtil */
+*::-webkit-scrollbar-track{
+    background:
+            repeating-linear-gradient(0deg,   var(--sb-grid) 0 1px, transparent 1px 8px),
+            repeating-linear-gradient(90deg,  var(--sb-grid) 0 1px, transparent 1px 8px),
+            var(--sb-bg);
+    border: 1px solid var(--sb-border);
+    border-radius: var(--sb-radius);
+    box-shadow: inset 0 0 0 1px rgba(0,0,0,.35);
+}
+
+/* thumb com “glow” emerald e borda pixel */
+*::-webkit-scrollbar-thumb{
+    background:
+            linear-gradient(180deg, var(--sb-thumb) 0%, #0ea87a 100%);
+    border: 1px solid rgba(0,0,0,.5);
+    border-radius: var(--sb-radius);
+    box-shadow:
+            0 0 0 1px rgba(255,255,255,.08) inset,
+            0 0 10px var(--sb-thumb-ghost),
+            0 6px 0 0 #0008;
+}
+
+/* hover/active states */
+*::-webkit-scrollbar-thumb:hover{
+    background: linear-gradient(180deg, #1be0a0 0%, var(--sb-thumb) 100%);
+    box-shadow:
+            0 0 0 1px rgba(255,255,255,.12) inset,
+            0 0 14px var(--sb-thumb-ghost),
+            0 6px 0 0 #0008;
+}
+*::-webkit-scrollbar-thumb:active{
+    background: linear-gradient(180deg, #12b886 0%, #0b9b70 100%);
+}
+
+/* cantos (quando aparece scroll X+Y) */
+*::-webkit-scrollbar-corner{
+    background: var(--sb-bg);
+    border: 1px solid var(--sb-border);
+}
+
+/* ===== Variantes utilitárias (opcional) ===== */
+/* Barra mais fina para containers específicos: <div class="scroll-thin">… */
+.scroll-thin{
+    scrollbar-width: thin;
+}
+.scroll-thin::-webkit-scrollbar{
+    width: 8px; height: 8px;
+}
+
+/* Barra oculta em mobile (ex.: colar numa área específica) */
+@media (max-width: 640px){
+    .scroll-hide-mobile{ scrollbar-width: none; }
+    .scroll-hide-mobile::-webkit-scrollbar{ display: none; }
+}
+
+
+/* Firefox */
+*{
+    scrollbar-width: thin;
+    scrollbar-color: var(--px-thumb-a) var(--px-track);
+}
+
+/* WebKit (Chrome/Edge/Safari) */
+*::-webkit-scrollbar{
+    width: calc(var(--px-size) + 2px);
+    height: calc(var(--px-size) + 2px);
+    background: transparent;
+}
+
+/* Track: quadriculado 8-bit + “moldura” */
+*::-webkit-scrollbar-track{
+    background:
+        /* quadriculado (snap a var(--px-size)) */
+            linear-gradient(var(--px-track),var(--px-track)),
+            conic-gradient(from 45deg,
+            transparent 0 25%, var(--px-grid) 0 50%,
+            transparent 0 75%, var(--px-grid) 0 100%);
+    background-size:
+            100% 100%,
+            calc(var(--px-size)) calc(var(--px-size));
+    background-blend-mode: normal, normal;
+    border: 0;
+    box-shadow:
+            0 0 0 1px var(--px-border) inset,    /* contorno duro */
+            0 0 0 2px rgba(255,255,255,.05) inset;
+}
+
+/* Thumb: blocos “pixel” com contorno em steps */
+*::-webkit-scrollbar-thumb{
+    background:
+        /* face com brilho em linhas (scanline leve) */
+            repeating-linear-gradient(0deg, var(--px-face) 0 1px, transparent 1px calc(var(--px-size)/1.5)),
+                /* mosaico 8-bit */
+            linear-gradient(var(--px-thumb-a), var(--px-thumb-a)),
+            conic-gradient(from 45deg,
+            var(--px-thumb-b) 0 25%, var(--px-thumb-a) 0 50%,
+            var(--px-thumb-b) 0 75%, var(--px-thumb-a) 0 100%);
+    background-size:
+            100% 100%,
+            calc(var(--px-size)) calc(var(--px-size)),
+            calc(var(--px-size)) calc(var(--px-size));
+    background-blend-mode: overlay, normal, normal;
+    border: 0;
+    /* “bordas em pixel” usando múltiplos shadows como steps */
+    box-shadow:
+            0 0 0 1px var(--px-border) inset,
+            0 0 0 2px rgba(0,0,0,.5) inset,
+            0 2px 0 0 #0008; /* sombra “arcade” */
+}
+
+/* Estados */
+*::-webkit-scrollbar-thumb:hover{
+    filter: saturate(1.15) brightness(1.08);
+    box-shadow:
+            0 0 0 1px var(--px-border) inset,
+            0 0 0 2px rgba(0,0,0,.6) inset,
+            0 0 12px rgba(25,226,158,.35), /* glow */
+            0 2px 0 0 #0008;
+}
+*::-webkit-scrollbar-thumb:active{
+    filter: brightness(.95);
+}
+
+/* Canto (quando há X+Y) */
+*::-webkit-scrollbar-corner{
+    background: var(--px-track);
+    box-shadow: 0 0 0 1px var(--px-border) inset;
+}
+
+/* ===== Variantes por container (opcional) ===== */
+/* Usa em divs específicas: <div class="px-scroll">… */
+.px-scroll{
+    scrollbar-width: thin;
+}
+.px-scroll::-webkit-scrollbar{
+    width: calc(var(--px-size) + 0px);
+    height: calc(var(--px-size) + 0px);
+}
+
+/* Versão mini (chips/listas apertadas) */
+.px-scroll-mini::-webkit-scrollbar{
+    width: calc(var(--px-size) - 2px);
+    height: calc(var(--px-size) - 2px);
+}
+
+/* Esconder em mobile (carrossel) */
+@media (max-width:640px){
+    .px-scroll-hide::-webkit-scrollbar{ display:none; }
+    .px-scroll-hide{ scrollbar-width: none; }
+}
+

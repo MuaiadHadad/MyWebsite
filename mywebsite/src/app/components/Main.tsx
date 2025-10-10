@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Press_Start_2P } from "next/font/google";
-
+import PixelHoverCanvas from "./PixelHoverCanvas";
 // Pixel font (Google Fonts)
 const pressStart = Press_Start_2P({ subsets: ["latin"], weight: "400" });
 
@@ -267,14 +267,25 @@ export default function MainPixelHero() {
 
     return (
         <main className="relative isolate min-h-[92vh] overflow-hidden bg-neutral-950 text-neutral-100">
-            {/* Pixel grid background */}
+            {/* Pixel grid background
             <div className="pointer-events-none absolute inset-0 [background-image:repeating-linear-gradient(0deg,rgba(255,255,255,0.03)_0_1px,transparent_1px_8px),repeating-linear-gradient(90deg,rgba(255,255,255,0.03)_0_1px,transparent_1px_8px)]" />
-
-            {/* CRT scanlines + vignette */}
+*/}
+            {/* CRT scanlines + vignette
             <div className="pointer-events-none absolute inset-0 mix-blend-overlay opacity-40 [background-image:linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px)] [background-size:100%_3px]" />
             <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,transparent,rgba(0,0,0,0.55))]" />
+            */}
+            {/* === Hover canvas ONLY in this section (behind everything here) === */}
+            <PixelHoverCanvas
+                className="absolute inset-0 pointer-events-none z-0"
+                cell={12} fade={0.07} strength={0.9}
+            />
 
-            <section className="mx-auto flex max-w-6xl flex-col items-center gap-10 px-6 py-16 md:flex-row md:items-stretch md:gap-16">
+            {/* === Section-only background overlays (above canvas) === */}
+            <div className="pointer-events-none absolute inset-0 z-10 [background-image:repeating-linear-gradient(0deg,rgba(255,255,255,0.03)_0_1px,transparent_1px_8px),repeating-linear-gradient(90deg,rgba(255,255,255,0.03)_0_1px,transparent_1px_8px)]" />
+            <div className="pointer-events-none absolute inset-0 z-20 mix-blend-overlay opacity-40 [background-image:linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px)] [background-size:100%_3px]" />
+            <div className="pointer-events-none absolute inset-0 z-20 bg-[radial-gradient(circle_at_center,transparent,rgba(0,0,0,0.55))]" />
+
+            <section className="mx-auto z-30 flex max-w-6xl flex-col items-center gap-10 px-6 py-16 md:flex-row md:items-stretch md:gap-16">
                 {/* Left: BIG pixel skill name card */}
                 <div className="relative flex w-full flex-1 items-center justify-center">
                     <motion.div
@@ -311,8 +322,7 @@ export default function MainPixelHero() {
                         className="text-balance font-black tracking-tight [text-shadow:0_1px_0_rgba(0,0,0,0.4)]"
                     >
                         <span className="block text-2xl text-neutral-300">Hi, I'm</span>
-                        <span className="mt-1 block text-5xl md:text-6xl">Muaiad</span>
-                        <span className="mt-2 block text-lg text-neutral-400">I craft code that shines in 8-bit ✨</span>
+                        <span className="mt-1 block text-5xl md:text-6xl">Muaiad Hadad</span>
                     </motion.h1>
 
                     <motion.p
@@ -321,7 +331,7 @@ export default function MainPixelHero() {
                         transition={{ delay: 0.2 }}
                         className="mt-5 max-w-xl text-pretty text-neutral-300"
                     >
-                        Hero section in <em>pixel-art</em> style with light animations. These are my <strong>skills</strong> — tap a chip to
+                        Hero section in <em>pixel-art</em> style with light animations. These are my <strong>skills</strong> - tap a chip to
                         preview the pixel card on the left.
                     </motion.p>
 

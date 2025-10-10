@@ -141,6 +141,8 @@ export default function AboutMe() {
             <div className="pointer-events-none absolute inset-0 [background-image:repeating-linear-gradient(0deg,rgba(255,255,255,0.03)_0_1px,transparent_1px_8px),repeating-linear-gradient(90deg,rgba(255,255,255,0.03)_0_1px,transparent_1px_8px)]" />
             <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,transparent,rgba(0,0,0,0.55))]" />
 
+
+
             <div className="relative mx-auto max-w-6xl px-6 py-20">
                 {/* title */}
                 <motion.h2
