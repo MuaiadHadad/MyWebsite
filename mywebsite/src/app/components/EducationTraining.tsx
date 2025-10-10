@@ -1,6 +1,8 @@
 "use client";
 
+import * as React from "react";
 import { motion } from "framer-motion";
+import { Download } from "lucide-react";
 
 /** ============ Pixel Art Utils ============ */
 type Pixel = 0 | string;
@@ -126,6 +128,41 @@ const S_BADGE: Sprite = [
     [0,0,0,0,0,0,0,0,0,0,0],
 ];
 
+/** ============ Downloads (presign) ============ */
+async function presignUrl(key: string) {
+    const res = await fetch(`/api/presign?key=${encodeURIComponent(key)}`, { cache: "no-store" });
+    if (!res.ok) throw new Error("presign_failed");
+    const { url } = await res.json();
+    return url as string;
+}
+
+type DownloadItem = { label: string; file: string };
+
+const downloadsByTraining: Record<string, DownloadItem[]> = {
+    "OpenEDG|English for IT I & II": [
+        { label: "English for IT I", file: "English_for_IT_1_Badge20241011-7-m7jzx1.pdf" },
+        { label: "English for IT II", file: "English_for_IT_2_Badge20241011-7-63htws.pdf" },
+    ],
+    "Python Institute|Python Essentials I": [
+        { label: "Certificate", file: "Python_Essentials_1_Badge20241011-7-rfvgsn.pdf" },
+    ],
+    "Cisco|PCAP — Programming Essentials in Python": [
+        { label: "PCAP", file: "Partner PCAP - Programming.pdf" },
+    ],
+    "Cisco|CCNAv7: Introduction to Networks": [
+        { label: "CCNAv7 Intro", file: "CCNAv7 Introduction to Networks.pdf" },
+    ],
+    "Cisco|CCNAv7: Switching, Routing & Wireless Essentials": [
+        { label: "CCNAv7 SRWE", file: "CCNAv7 Switching, Routing, and.pdf" },
+    ],
+    "Cisco|NDG Linux Essentials": [
+        { label: "Linux Essentials", file: "Partner NDG Linux Essentials.pdf" },
+    ],
+    "Cisco|JavaScript Essentials I": [
+        { label: "JSE 1", file: "Partner JavaScript Essentials 1 (JSE).pdf" },
+    ],
+};
+
 /** ============ Data ============ */
 const education = [
     {
@@ -139,6 +176,7 @@ const education = [
             "Networks & Systems Administration",
             "Databases and Web Development",
         ],
+        diplomaFile: "diploma degree.pdf",
     },
     {
         title: "High School (Technological Path)",
@@ -169,6 +207,32 @@ function Badge({ children }: { children: React.ReactNode }) {
     );
 }
 
+function DownloadButton({ file, children }: { file: string; children: React.ReactNode }) {
+    const [busy, setBusy] = React.useState(false);
+
+    return (
+        <button
+            onClick={async () => {
+                try {
+                    setBusy(true);
+                    const url = await presignUrl(file);
+                    window.open(url, "_blank", "noopener,noreferrer");
+                } catch {
+                    alert("Não foi possível gerar o link de download. Tenta novamente.");
+                } finally {
+                    setBusy(false);
+                }
+            }}
+            disabled={busy}
+            className="inline-flex items-center gap-1 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-2.5 py-1 text-[11px] font-medium text-emerald-200 hover:bg-emerald-400/15 active:translate-y-px transition disabled:opacity-50"
+            title={busy ? "A gerar link..." : "Download"}
+        >
+            <Download className="h-3.5 w-3.5" />
+            {busy ? "A gerar..." : children}
+        </button>
+    );
+}
+
 /** ============ Component ============ */
 export default function EducationTraining() {
     return (
@@ -184,7 +248,8 @@ export default function EducationTraining() {
                     whileInView={{ y: 0, opacity: 1 }}
                     viewport={{ once: true, amount: 0.6 }}
                     transition={{ type: "spring", stiffness: 120, damping: 14 }}
-                    className="text-balance text-4xl font-black tracking-tight md:text-5xl">
+                    className="text-balance text-4xl font-black tracking-tight md:text-5xl"
+                >
                     Education <span className="text-emerald-300">& Training</span>
                 </motion.h2>
 
@@ -217,6 +282,7 @@ export default function EducationTraining() {
                                                 <span className="font-semibold">{ed.title}</span>
                                                 <span className="opacity-60">— {ed.school}</span>
                                             </div>
+
                                             <div className="flex items-center gap-3 text-xs text-neutral-400">
                         <span className="inline-flex items-center gap-1">
                           <PixelSprite data={S_CALENDAR} pixel={3} />
@@ -228,9 +294,16 @@ export default function EducationTraining() {
                         </span>
                                             </div>
                                         </div>
-                                        <div className="mt-2 text-xs text-emerald-300/80">{ed.meta}</div>
+
+                                        <div className="mt-2 flex flex-wrap items-center gap-2">
+                                            <div className="text-xs text-emerald-300/80">{ed.meta}</div>
+                                            {"diplomaFile" in ed && (ed as any).diplomaFile && (
+                                                <DownloadButton file={(ed as any).diplomaFile}>Diploma</DownloadButton>
+                                            )}
+                                        </div>
+
                                         <ul className="mt-3 list-inside list-disc space-y-1 text-neutral-300/90">
-                                            {ed.highlights.map((h) => (
+                                            {ed.highlights.map((h: string) => (
                                                 <li key={h}>{h}</li>
                                             ))}
                                         </ul>
@@ -262,20 +335,39 @@ export default function EducationTraining() {
                         <PixelSprite data={S_AWARD} pixel={3} /> Certifications & Courses
                     </motion.h3>
 
-                    <div className="flex flex-wrap gap-2">
-                        {trainings.map((t, i) => (
-                            <motion.span
-                                key={`${t.provider}-${t.name}`}
-                                initial={{ scale: 0.95, opacity: 0 }}
-                                whileInView={{ scale: 1, opacity: 1 }}
-                                viewport={{ once: true }}
-                                transition={{ delay: 0.03 * i, type: "spring", stiffness: 240, damping: 16 }}
-                                className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-neutral-200"
-                            >
-                                <PixelSprite data={t.sprite} pixel={3} /> {t.name}{" "}
-                                <span className="opacity-60">— {t.provider}</span>
-                            </motion.span>
-                        ))}
+                    <div className="flex flex-col gap-2">
+                        {trainings.map((t, i) => {
+                            const key = `${t.provider}|${t.name}`;
+                            const files = downloadsByTraining[key] ?? [];
+                            return (
+                                <motion.div
+                                    key={key}
+                                    initial={{ scale: 0.98, opacity: 0 }}
+                                    whileInView={{ scale: 1, opacity: 1 }}
+                                    viewport={{ once: true }}
+                                    transition={{ delay: 0.02 * i, type: "spring", stiffness: 240, damping: 16 }}
+                                    className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-white/10 bg-white/5 px-3 py-2"
+                                >
+                  <span className="inline-flex items-center gap-2 text-xs text-neutral-200">
+                    <PixelSprite data={t.sprite} pixel={3} />
+                      {t.name} <span className="opacity-60">— {t.provider}</span>
+                  </span>
+
+                                    {/* Download buttons */}
+                                    <div className="flex flex-wrap gap-2">
+                                        {files.length === 0 ? (
+                                            <span className="text-[11px] text-neutral-400">Sem ficheiros anexados</span>
+                                        ) : (
+                                            files.map((f) => (
+                                                <DownloadButton key={f.file} file={f.file}>
+                                                    {f.label}
+                                                </DownloadButton>
+                                            ))
+                                        )}
+                                    </div>
+                                </motion.div>
+                            );
+                        })}
                     </div>
                 </div>
             </div>

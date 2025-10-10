@@ -8,6 +8,8 @@
     "start": "next start"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.907.0",
+    "@aws-sdk/s3-request-presigner": "^3.907.0",
     "framer-motion": "^11.18.2",
     "isomorphic-dompurify": "^2.28.0",
     "lucide-react": "^0.544.0",
