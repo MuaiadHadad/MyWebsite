@@ -1,0 +1,95 @@
+# Dependencies
+node_modules
+npm-debug.log
+pnpm-debug.log
+yarn-error.log
+
+# Environment files
+.env
+.env.local
+.env.production
+.env.development
+.env*.local
+
+# Testing
+coverage
+.nyc_output
+
+# Next.js
+.next/
+out/
+build
+dist
+
+# Misc
+.DS_Store
+*.pem
+.vscode
+.idea
+
+# Debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Git
+.git
+.gitignore
+
+# Docker
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# Documentation
+README.md
+LICENSE
+# Adicionar ao .gitignore
+.env
+.env.local
+.env.production
+.env.development
+version: '3.8'
+
+services:
+  mywebsite:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: mywebsite
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      # GitHub Models API (OpenAI)
+      - GITHUB_MODELS_TOKEN=${GITHUB_MODELS_TOKEN}
+      - GITHUB_MODELS_MODEL=${GITHUB_MODELS_MODEL:-openai/gpt-4o}
+
+      # GitHub API for fetching repositories
+      - GITHUB_PUBLIC_USERNAME=${GITHUB_PUBLIC_USERNAME}
+      - GITHUB_API_TOKEN=${GITHUB_API_TOKEN}
+
+      # MinIO/S3 Configuration
+      - MINIO_ENDPOINT=${MINIO_ENDPOINT}
+      - MINIO_BUCKET=${MINIO_BUCKET}
+      - MINIO_REGION=${MINIO_REGION:-us-east-1}
+      - MINIO_FORCE_PATH_STYLE=${MINIO_FORCE_PATH_STYLE:-true}
+      - MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY}
+      - MINIO_SECRET_KEY=${MINIO_SECRET_KEY}
+
+      # Next.js
+      - NODE_ENV=production
+      - NEXT_TELEMETRY_DISABLED=1
+    networks:
+      - mywebsite-network
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+networks:
+  mywebsite-network:
+    driver: bridge
+

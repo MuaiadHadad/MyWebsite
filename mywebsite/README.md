@@ -1,36 +1,94 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# MyWebsite - Portfolio Pessoal
 
-## Getting Started
+Portfolio pessoal construído com Next.js 15, TypeScript, Tailwind CSS e integração com AI Chat.
 
-First, run the development server:
+## 🚀 Início Rápido
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+# Instalar dependências
+pnpm install
+
+# Configurar variáveis de ambiente
+cp .env.example .env
+# Edite o .env com suas credenciais
+
+# Desenvolvimento
 pnpm dev
-# or
-bun dev
+
+# Build para produção
+pnpm build
+pnpm start
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Acesse [http://localhost:3000](http://localhost:3000)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🐳 Deploy com Docker
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+# Configurar variáveis de ambiente
+cp .env.example .env
+# Edite o .env com suas credenciais
 
-## Learn More
+# Build e iniciar
+docker-compose up -d
 
-To learn more about Next.js, take a look at the following resources:
+# Ver logs
+docker-compose logs -f
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 📚 Documentação Completa
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Para instruções detalhadas de deployment, configuração e troubleshooting, consulte o **[DEPLOYMENT.md](./DEPLOYMENT.md)**.
 
-## Deploy on Vercel
+## 🛠️ Tecnologias
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- **Next.js 15.5.4** - Framework React
+- **TypeScript** - Tipagem estática
+- **Tailwind CSS 4** - Estilização
+- **Framer Motion** - Animações
+- **OpenAI API** (via GitHub Models) - Chat AI
+- **AWS SDK** - Integração S3/MinIO
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 📋 Features
+
+- ✅ Design responsivo e moderno
+- ✅ Chat AI integrado com OpenAI
+- ✅ Integração com GitHub para exibir repositórios
+- ✅ Upload e gerenciamento de arquivos via S3/MinIO
+- ✅ Animações suaves com Framer Motion
+- ✅ Otimizado para produção
+- ✅ Suporte Docker
+
+## 🔐 Variáveis de Ambiente
+
+Copie `.env.example` para `.env` e configure:
+
+```env
+# GitHub Models (OpenAI)
+GITHUB_MODELS_TOKEN=seu_token_aqui
+
+# GitHub API
+GITHUB_PUBLIC_USERNAME=seu_username
+GITHUB_API_TOKEN=seu_github_token
+
+# MinIO/S3
+MINIO_ENDPOINT=http://seu-servidor:9000
+MINIO_BUCKET=nome-do-bucket
+MINIO_ACCESS_KEY=sua_access_key
+MINIO_SECRET_KEY=sua_secret_key
+```
+
+## 📦 Scripts Disponíveis
+
+- `pnpm dev` - Inicia servidor de desenvolvimento
+- `pnpm build` - Build para produção
+- `pnpm start` - Inicia servidor de produção
+
+## 📖 Aprenda Mais
+
+- [Next.js Documentation](https://nextjs.org/docs)
+- [Deployment Guide](./DEPLOYMENT.md) - Guia completo de deploy
+
+## 📄 Licença
+
+Ver arquivo `LICENSE`
