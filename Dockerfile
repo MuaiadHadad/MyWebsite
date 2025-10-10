@@ -15,8 +15,8 @@ RUN npm install -g pnpm@9.12.0
 # Copy package files
 COPY package.json pnpm-lock.yaml* ./
 
-# Install dependencies (prefer lockfile, fallback if missing)
-RUN pnpm install --frozen-lockfile || pnpm install
+# Install dependencies including devDependencies explicitly
+RUN pnpm install --prod=false --frozen-lockfile || pnpm install --prod=false
 
 # Rebuild the source code only when needed
 FROM base AS builder
