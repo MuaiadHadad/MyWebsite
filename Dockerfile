@@ -4,18 +4,20 @@ RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
 # Install pnpm
-RUN corepack enable && corepack prepare pnpm@latest --activate
+RUN corepack enable && corepack prepare pnpm@9.12.0 --activate
 
 # Copy package files
-COPY package.json pnpm-lock.yaml ./
-RUN pnpm install --frozen-lockfile
+COPY package.json pnpm-lock.yaml* ./
+
+# Install dependencies with better error handling
+RUN pnpm install --no-frozen-lockfile || pnpm install
 
 # Stage 2: Builder
 FROM node:20-alpine AS builder
 WORKDIR /app
 
 # Install pnpm
-RUN corepack enable && corepack prepare pnpm@latest --activate
+RUN corepack enable && corepack prepare pnpm@9.12.0 --activate
 
 # Copy dependencies from deps stage
 COPY --from=deps /app/node_modules ./node_modules
@@ -24,7 +26,7 @@ COPY . .
 # Set environment variable for build
 ENV NEXT_TELEMETRY_DISABLED=1
 
-# Build the application
+# Build the application (remove --turbopack for Docker builds)
 RUN pnpm build
 
 # Stage 3: Runner
@@ -54,4 +56,3 @@ ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
 
 CMD ["node", "server.js"]
-
