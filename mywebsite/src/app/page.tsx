@@ -4,6 +4,7 @@ import NavBar from "./components/NavBar";
 import MainPixelHero from "./components/Main";
 import AboutMe from "./components/AboutMe";
 import ChatWidget from "./components/ChatWidget";
+import ProjectsPixelGrid from "./components/ProjectsPixelGrid";
 
 import WorkExperience, {
     WorkExperienceTwoUp,
@@ -13,7 +14,7 @@ import WorkExperience, {
 import EducationTraining from "./components/EducationTraining";
 import SkillsSection from "./components/SkillsSection";
 import ContactSection from "./components/ContactSection";
-
+import Footer from "./components/Footer";
 
 
 
@@ -30,8 +31,10 @@ export default function App() {
             <WorkExperience />
             <EducationTraining />
             <SkillsSection />
+            <ProjectsPixelGrid/>
             <ContactSection/>
             <ChatWidget />
+            <Footer />
 
         </>
     );

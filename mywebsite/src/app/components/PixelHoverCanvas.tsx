@@ -3,17 +3,18 @@
 import { useEffect, useRef } from "react";
 
 export default function PixelHoverCanvas({
-                                             cell = 12,          // tamanho do pixel
-                                             color = "hsla(160 90% 60% / 1)", // cor do pixel
-                                             border = "rgba(0,0,0,0.25)",     // contorno
-                                             snap = false,       // true = encaixa na grelha; false = centra no cursor
+                                             cell = 12,
+                                             color = "hsla(160 90% 60% / 1)",
+                                             border = "rgba(0,0,0,0.25)",
+                                             snap = false,
                                              className = "absolute inset-0 pointer-events-none z-0",
                                          }: {
-    cell?: number;
-    color?: string;
-    border?: string;
-    snap?: boolean;
-    className?: string;
+    cell?: number,
+    color?: string,
+    border?: string,
+    snap?: boolean,
+    className?: string,
+    fade?: number
 }) {
     const ref = useRef<HTMLCanvasElement | null>(null);
     const dprRef = useRef(1);

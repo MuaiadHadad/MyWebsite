@@ -285,7 +285,7 @@ export default function MainPixelHero() {
             <div className="pointer-events-none absolute inset-0 z-20 mix-blend-overlay opacity-40 [background-image:linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px)] [background-size:100%_3px]" />
             <div className="pointer-events-none absolute inset-0 z-20 bg-[radial-gradient(circle_at_center,transparent,rgba(0,0,0,0.55))]" />
 
-            <section className="mx-auto z-30 flex max-w-6xl flex-col items-center gap-10 px-6 py-16 md:flex-row md:items-stretch md:gap-16">
+            <section id="hero" className="mx-auto z-30 flex max-w-6xl flex-col items-center gap-10 px-6 py-16 md:flex-row md:items-stretch md:gap-16">
                 {/* Left: BIG pixel skill name card */}
                 <div className="relative flex w-full flex-1 items-center justify-center">
                     <motion.div

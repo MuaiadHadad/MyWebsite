@@ -184,8 +184,7 @@ export default function EducationTraining() {
                     whileInView={{ y: 0, opacity: 1 }}
                     viewport={{ once: true, amount: 0.6 }}
                     transition={{ type: "spring", stiffness: 120, damping: 14 }}
-                    className="text-balance text-4xl font-black tracking-tight md:text-5xl"
-                >
+                    className="text-balance text-4xl font-black tracking-tight md:text-5xl">
                     Education <span className="text-emerald-300">& Training</span>
                 </motion.h2>
 

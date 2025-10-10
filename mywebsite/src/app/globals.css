@@ -204,4 +204,39 @@ body {
     .px-scroll-hide::-webkit-scrollbar{ display:none; }
     .px-scroll-hide{ scrollbar-width: none; }
 }
+/* Pixel title underline + subtle glow */
+.pixel-title {
+    position: relative;
+    display: inline-block;
+    letter-spacing: 0.15em;
+    font-size: 0.95rem; /* ajusta se quiseres maior */
+}
+@media (min-width: 640px){
+    .pixel-title { font-size: 1.1rem; }
+}
+.pixel-title::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -8px;
+    height: 4px;
+    background:
+            repeating-linear-gradient(90deg, rgba(94,234,212,.9) 0 8px, transparent 8px 12px);
+    box-shadow: 0 0 10px rgba(94,234,212,.35);
+}
 
+/* Pixel card frame + glow (reutilizado no site) */
+.pixel-card {
+    outline: 2px solid rgba(148,163,184,0.15);
+    box-shadow:
+            0 0 0 1px rgba(255,255,255,0.08) inset,
+            0 0 0 2px rgba(2,6,23,0.75) inset,
+            0 0 12px rgba(16,185,129,0.18);
+}
+.pixel-card:hover {
+    box-shadow:
+            0 0 0 1px rgba(255,255,255,0.10) inset,
+            0 0 0 2px rgba(2,6,23,0.9) inset,
+            0 0 16px rgba(16,185,129,0.28);
+}
