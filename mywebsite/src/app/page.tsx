@@ -1,6 +1,19 @@
 // App.tsx
 import React from "react";
 import NavBar from "./components/NavBar";
+import MainPixelHero from "./components/Main";
+import AboutMe from "./components/AboutMe";
+import WorkExperience, {
+    WorkExperienceTwoUp,
+    WorkExperienceRight,
+    WorkExperienceLeft,
+} from "./components/WorkExperience";
+import EducationTraining from "./components/EducationTraining";
+import SkillsSection from "./components/SkillsSection";
+import ContactSection from "./components/ContactSection";
+
+
+
 
 export default function App() {
     return (
@@ -10,7 +23,12 @@ export default function App() {
                 brand="WALRUS"
                 // podes customizar items e docs se quiseres
             />
-            <main className="max-w-7xl mx-auto p-6">...</main>
+            <MainPixelHero />
+            <AboutMe />
+            <WorkExperience />
+            <EducationTraining />
+            <SkillsSection />
+            <ContactSection/>
         </>
     );
 }

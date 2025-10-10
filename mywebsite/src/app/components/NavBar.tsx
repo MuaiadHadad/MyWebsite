@@ -2,7 +2,18 @@
 
 import React, { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Code2, Menu, X } from "lucide-react";
+
+/**
+ * NavBarWalrus — Responsive navbar with desktop pill menu and animated mobile side-drawer.
+ *
+ * Updates:
+ * - Added animated indicator square for each menu item.
+ *   * Hover: subtle ping.
+ *   * Active route: highlighted border + continuous ping.
+ * - Guards against `docs` being null/undefined (no runtime TypeError).
+ */
 
 // Types
 export type MenuItem = { label: string; href?: string; to?: string; external?: boolean };
@@ -12,9 +23,7 @@ export type NavBarWalrusProps = {
     logo?: { src: string; alt?: string };
     brand?: string;
     items?: MenuItem[];
-    /**
-     * "Docs" button props. If null/undefined, the button is hidden (no crash).
-     */
+    /** If null/undefined, the Docs button is hidden. */
     docs?: DocsBtn;
 };
 
@@ -37,11 +46,12 @@ export default function NavBarWalrus({
                                          docs,
                                      }: NavBarWalrusProps) {
     const [open, setOpen] = useState(false);
+    const pathname = usePathname();
 
     // Normalize docs to a safe object or null
     const docsSafe = (docs && typeof docs === "object") ? docs : null;
     const docsHref = docsSafe?.href ?? docsSafe?.to ?? "#";
-    const showDocs = !!docsSafe; // renderiza botão só se existir
+    const showDocs = !!docsSafe;
 
     // Close on ESC
     useEffect(() => {
@@ -66,7 +76,7 @@ export default function NavBarWalrus({
                 <div className="flex items-center gap-3 min-w-0">
                     <Code2 className="h-7 w-7 text-teal-400" />
                     <div style={{ fontFamily: "'Press Start 2P', cursive" }} className="leading-tight select-none">
-                        <div className="text-[11px] sm:text-xs font-semibold text-gray-200">FULL-STACK</div>
+                        <div className="text-[11px] sm:text-xs font-semibold text-gray-200">FULL STACK</div>
                         <div className="text-[11px] sm:text-xs font-semibold text-teal-400">DEVELOPER</div>
                     </div>
                 </div>
@@ -78,21 +88,38 @@ export default function NavBarWalrus({
                             .filter((it) => getHref(it))
                             .map((item) => {
                                 const href = getHref(item)!;
-                                const content = (
-                                    <span className="inline-flex items-center gap-2 text-[13px] font-semibold tracking-wide whitespace-nowrap">
-                    <span className="inline-block h-2 w-2 rounded-[2px] border border-white/70" />
-                                        {item.label}
-                                        {item.external && <span aria-hidden className="ml-1 text-white/80">↗</span>}
+                                const isActive = !!href && (pathname === href || pathname?.startsWith(href + "/"));
+                                const Indicator = (
+                                    <span className="relative inline-block h-2 w-2 align-middle">
+                    {/* border box */}
+                                        <span className={`absolute inset-0 rounded-[2px] border ${isActive ? "border-teal-300" : "border-white/70"}`} />
+                                        {/* glow/ping */}
+                                        <span
+                                            className={`absolute inset-0 rounded-[2px] ${
+                                                isActive
+                                                    ? "bg-teal-300/70 animate-ping"
+                                                    : "bg-transparent group-hover:bg-teal-300/60 group-hover:animate-ping"
+                                            } motion-reduce:animate-none`}
+                                        />
                   </span>
                                 );
+
+                                const content = (
+                                    <span className={`inline-flex items-center gap-2 text-[13px] font-semibold tracking-wide whitespace-nowrap ${isActive ? "text-teal-300" : ""}`}>
+                    {Indicator}
+                                        {item.label}
+                                        {item.external}
+                  </span>
+                                );
+
                                 return (
                                     <li key={item.label} className="m-0 p-0">
                                         {item.external ? (
-                                            <a href={href} target="_blank" rel="noreferrer noopener" className="hover:text-teal-300 transition-colors">
+                                            <a href={href} target="_blank" rel="noreferrer noopener" className="group hover:text-teal-300 transition-colors">
                                                 {content}
                                             </a>
                                         ) : (
-                                            <Link href={href} className="hover:text-teal-300 transition-colors">
+                                            <Link href={href} className="group hover:text-teal-300 transition-colors">
                                                 {content}
                                             </Link>
                                         )}
@@ -165,12 +192,9 @@ export default function NavBarWalrus({
             >
                 {/* Drawer header */}
                 <div className="h-20 px-4 flex items-center justify-between border-b border-white/10">
-                    <div className="flex items-center gap-3 min-w-0">
-                        <Code2 className="h-7 w-7 text-teal-400" />
-                        <div style={{ fontFamily: "'Press Start 2P', cursive" }} className="leading-tight select-none">
-                            <div className="text-[11px] sm:text-xs font-semibold text-gray-200">FULL-STACK</div>
-                            <div className="text-[11px] sm:text-xs font-semibold text-teal-400">DEVELOPER</div>
-                        </div>
+                    <div className="flex items-center gap-3">
+                        <Code2 className="h-6 w-6 text-teal-400" />
+                        <span className="text-sm font-bold tracking-wider">{brand}</span>
                     </div>
                     <button
                         type="button"
@@ -189,21 +213,25 @@ export default function NavBarWalrus({
                             .filter((it) => getHref(it))
                             .map((item) => {
                                 const href = getHref(item)!;
+                                const isActive = !!href && (pathname === href || pathname?.startsWith(href + "/"));
                                 const Inner = (
-                                    <span className="flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-white/10 active:bg-white/15 transition-colors text-sm font-semibold">
-                    <span className="inline-block h-2 w-2 rounded-[2px] border border-white/70" />
+                                    <span className={`flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-white/10 active:bg-white/15 transition-colors text-sm font-semibold ${isActive ? "text-teal-300" : ""}`}>
+                    <span className="relative inline-block h-2 w-2">
+                      <span className={`absolute inset-0 rounded-[2px] border ${isActive ? "border-teal-300" : "border-white/70"}`} />
+                      <span className={`${isActive ? "bg-teal-300/70 animate-ping" : "bg-transparent group-hover:bg-teal-300/60 group-hover:animate-ping"} absolute inset-0 rounded-[2px] motion-reduce:animate-none`} />
+                    </span>
                                         {item.label}
-                                        {item.external && <span aria-hidden className="ml-auto text-white/70">↗</span>}
+                                        {item.external}
                   </span>
                                 );
                                 return (
                                     <li key={item.label}>
                                         {item.external ? (
-                                            <a href={href} target="_blank" rel="noreferrer noopener" onClick={close}>
+                                            <a href={href} target="_blank" rel="noreferrer noopener" onClick={close} className="group">
                                                 {Inner}
                                             </a>
                                         ) : (
-                                            <Link href={href} onClick={close}>
+                                            <Link href={href} onClick={close} className="group">
                                                 {Inner}
                                             </Link>
                                         )}
@@ -211,31 +239,6 @@ export default function NavBarWalrus({
                                 );
                             })}
                     </ul>
-
-                    {/* Docs button inside drawer */}
-                    {showDocs && (
-                        <div className="mt-4">
-                            {docsSafe!.external ? (
-                                <a
-                                    href={docsHref}
-                                    target="_blank"
-                                    rel="noreferrer noopener"
-                                    onClick={close}
-                                    className="w-full inline-flex items-center justify-center gap-2 rounded-lg bg-teal-300/90 hover:bg-teal-300 px-4 py-3 font-extrabold tracking-wide text-neutral-900 transition-colors"
-                                >
-                                    {docsSafe!.label ?? "READ DOCS"} <span aria-hidden>↗</span>
-                                </a>
-                            ) : (
-                                <Link
-                                    href={docsHref}
-                                    onClick={close}
-                                    className="w-full inline-flex items-center justify-center gap-2 rounded-lg bg-teal-300/90 hover:bg-teal-300 px-4 py-3 font-extrabold tracking-wide text-neutral-900 transition-colors"
-                                >
-                                    {docsSafe!.label ?? "READ DOCS"} <span aria-hidden>↗</span>
-                                </Link>
-                            )}
-                        </div>
-                    )}
                 </nav>
             </aside>
         </header>
