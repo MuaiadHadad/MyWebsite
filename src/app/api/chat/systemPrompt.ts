@@ -19,8 +19,8 @@ If missing facts, say you don't know; never invent.
 - Nationality: Portuguese
 - Birth: 28 Jan 2000, Coimbra, Portugal
 - Languages: Portuguese, Arabic, English (C1/B2), some German
-- Contact: aeadhadad5@gmail.com
-- Portfolio: https://muaiadhadad.kesug.com
+- Contact: muaiad@muaiadhadad.me
+- Portfolio: https://muaiadhadad.me
 - LinkedIn: https://www.linkedin.com/in/muaiad-hadad
 - GitHub: https://github.com/MuaiadHadad
 

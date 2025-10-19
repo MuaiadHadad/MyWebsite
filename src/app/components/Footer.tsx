@@ -7,7 +7,7 @@ import { Github, Linkedin, Mail, ArrowUp, Code2 } from "lucide-react";
 /** Ajusta estes URLs conforme preciso */
 const GITHUB = "https://github.com/MuaiadHadad";
 const LINKEDIN = "https://www.linkedin.com/in/"; // <-- coloca o teu handle
-const EMAIL = "mailto:"; // <-- coloca o teu email, ex: mailto:muaiad@example.com
+const EMAIL = "mailto:muaiad@muaiadhadad.me";
 
 const LINKS = [
     { label: "Home", href: "#hero" },

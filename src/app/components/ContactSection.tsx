@@ -108,11 +108,11 @@ const S_LINKEDIN: Sprite = [
 
 /* ============ contactos do teu CV ============ */
 const CONTACTS = {
-    email: "aeadhadad5@gmail.com",
+    email: "muaiad@muaiadhadad.me",
     phone: "+351 938 929 505",
     github: "https://github.com/MuaiadHadad",
     linkedin: "https://www.linkedin.com/in/muaiad-hadad/",
-    website: "https://muaiadhadad.kesug.com/",
+    website: "https://muaiadhadad.me",
 };
 
 export default function ContactSection() {
