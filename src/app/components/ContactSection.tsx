@@ -118,23 +118,48 @@ const CONTACTS = {
 export default function ContactSection() {
     const [state, setState] = useState<"idle" | "loading" | "success" | "error">("idle");
     const [message, setMessage] = useState("");
+    const [lastSubmitTime, setLastSubmitTime] = useState<number>(0);
 
     async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
+
+        // Anti-spam: prevent multiple submissions within 30 seconds
+        const now = Date.now();
+        const timeSinceLastSubmit = now - lastSubmitTime;
+        if (timeSinceLastSubmit < 30000 && lastSubmitTime !== 0) {
+            setState("error");
+            setMessage("Please wait 30 seconds before sending another message.");
+            setTimeout(() => {
+                setState("idle");
+                setMessage("");
+            }, 3000);
+            return;
+        }
+
         setState("loading");
         setMessage("");
-        const data = Object.fromEntries(new FormData(e.currentTarget)) as Record<string, string>;
+        const form = e.currentTarget as HTMLFormElement;
+        const data = Object.fromEntries(new FormData(form)) as Record<string, string>;
 
         // honeypot
         if (data._hp) {
             setState("success");
-            (e.currentTarget as HTMLFormElement).reset();
+            setMessage("Message sent successfully!");
+            form.reset();
+            setTimeout(() => {
+                setState("idle");
+                setMessage("");
+            }, 3000);
             return;
         }
 
         if (!data.name || !data.email || !data.message) {
             setState("error");
             setMessage("Please fill in name, email and message.");
+            setTimeout(() => {
+                setState("idle");
+                setMessage("");
+            }, 3000);
             return;
         }
 
@@ -144,13 +169,32 @@ export default function ContactSection() {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(data),
             });
-            if (!res.ok) throw new Error();
+
+            const result = await res.json();
+
+            if (!res.ok) {
+                throw new Error(result.error || "Failed to send message");
+            }
+
             setState("success");
-            setMessage("Message sent. I’ll get back to you soon!");
-            (e.currentTarget as HTMLFormElement).reset();
-        } catch {
+            setMessage("Message sent! I'll get back to you soon.");
+            setLastSubmitTime(now);
+            form.reset();
+
+            // Reset to idle after 5 seconds
+            setTimeout(() => {
+                setState("idle");
+                setMessage("");
+            }, 5000);
+        } catch (error) {
             setState("error");
             setMessage("Something went wrong. Please try again or email me directly.");
+
+            // Reset to idle after 4 seconds
+            setTimeout(() => {
+                setState("idle");
+                setMessage("");
+            }, 4000);
         }
     }
 
