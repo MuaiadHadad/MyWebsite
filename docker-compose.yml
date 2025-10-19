@@ -24,6 +24,9 @@ services:
       - MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY}
       - MINIO_SECRET_KEY=${MINIO_SECRET_KEY}
 
+      # Resend (Email Service)
+      - RESEND_API_KEY=${RESEND_API_KEY}
+
       # Next.js
       - NODE_ENV=production
       - NEXT_TELEMETRY_DISABLED=1
